@@ -1,3 +1,0 @@
-function on_load minecraft:load {
-    scoreboard objectives add <%config.internalScoreboardName*'aw%> dummy
-}
