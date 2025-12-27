@@ -66,7 +66,7 @@ def filter_stdout_for_soft_errors(stdout: str) -> Optional[str]:
     def capture_error(errorTitle: str, index: int):
         error = colorama.Fore.RED + errorTitle
         for i in range(index + 1, len(lines)):
-            if not lines[i][0] in ["\t", " "]:
+            if len(lines[i].strip()) == 0 or not lines[i][0] in ["\t", " "]:
                 return error
             if len(error) == 0:
                 error = lines[i].strip()
@@ -75,9 +75,9 @@ def filter_stdout_for_soft_errors(stdout: str) -> Optional[str]:
         return error + colorama.Fore.RESET
 
     for line in lines:
-        if line.startswith("[MCB] Parser Error:"):
+        if " Parser Error:" in line:
             return capture_error("Parser Error:", lines.index(line))
-        elif line.startswith("[MCB] Compiler Error:"):
+        elif " Compiler Error:" in line:
             return capture_error("Compiler Error:", lines.index(line))
 
 
@@ -134,7 +134,7 @@ def mcbuild(ctx: Context, opts: MCBuildOptions):
             stderr=subprocess.PIPE,
             universal_newlines=True,
         )
-        errors = filter_stdout_for_soft_errors(app.stdout)
+        errors = filter_stdout_for_soft_errors(app.stderr)
         if errors:
             log(errors)
     except subprocess.CalledProcessError as e:
