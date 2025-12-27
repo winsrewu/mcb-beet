@@ -10,3 +10,5 @@ MC-Build BeetMC plugin
 ],
 ``
 to your beet.json file
+3. create a new folder named "mcbuild" in your beet project's root directory and
+add your mcb files into it!
